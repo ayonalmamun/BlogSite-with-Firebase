@@ -14,6 +14,7 @@
 // firebase auth persistance
 firebase.auth.Auth.Persistence.LOCAL;
 
+// login
 $("#btn-login").click(function(){
   var email = $("#email").val();
   var password = $("#password").val();
@@ -35,10 +36,12 @@ $("#btn-login").click(function(){
   }
 });
 
+// logout
 $("#btn-logout").click(function(){
   firebase.auth().signOut();
 });
 
+// signup
 $("#btn-signup").click(function(){
   var email = $("#email").val();
   var password = $("#password").val();
@@ -63,5 +66,27 @@ $("#btn-signup").click(function(){
   }
   else{
     window.alert("Password doesn't match with confirm password!");
+  }
+});
+
+// forget password
+$("#btn-resetPassword").click(function(){
+  var auth = firebase.auth();
+  var email = $("#email").val();
+
+  if(email!= ""){
+    auth.sendPasswordResetEmail(email).then(function(){
+      window.alert("Email successfully sent! Please check and verify!");
+    }).catch(function(error){
+      var errorCode = error.code;
+      var errorMessage = error.message;
+        
+      console.log(errorCode);
+      console.log(errorMessage);
+      window.alert("Message: " + errorMessage);
+    });
+  }
+  else{
+    window.alert("Please write your email first");
   }
 });
