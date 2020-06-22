@@ -76,7 +76,7 @@ $("#btn-resetPassword").click(function(){
 
   if(email!= ""){
     auth.sendPasswordResetEmail(email).then(function(){
-      window.alert("Email successfully sent! Please check and verify!");
+    window.alert("Email successfully sent! Please check and verify!");
     }).catch(function(error){
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -88,5 +88,49 @@ $("#btn-resetPassword").click(function(){
   }
   else{
     window.alert("Please write your email first");
+  }
+});
+
+// Account Settings
+$("#btn-update").click(function(){
+  var phone = $("#phone").val();
+  var address = $("#address").val();
+  var bio = $("#bio").val();
+  var name = $("#name").val();
+  var nickname = $("#nickname").val();
+  var country = $("#country").val();
+  var gender = $("#gender").val();
+
+  var rootRef = firebase.database().ref().child("Users");
+  var userID = firebase.auth().currentUser.uid;
+  var usersRef = rootRef.child(userID);
+
+  if(name!="" && nickname!="" && phone!="" && address!="" && bio!="" && country!="" && gender!=""){
+    var userData = {
+      "phone" : phone, 
+      "address" : address,
+      "bio" : bio,
+      "name" : name,
+      "nickname" : nickname,
+      "country" : country,
+      "gender" : gender,
+    }
+
+    usersRef.set(userData, function(error){
+      if(error){
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        
+        console.log(errorCode);
+        console.log(errorMessage);
+        window.alert("Message: " + errorMessage);
+      }
+      else{
+        window.location.href = "main.html";
+      }
+    });
+  }
+  else{
+    window.alert("Form is incomplete");
   }
 });

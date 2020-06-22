@@ -57,7 +57,17 @@
     <script>
         firebase.auth().onAuthStateChanged(function(user){
             if(user){
-                window.location.href = "main.html";
+                // checking if user has updated his Account Settings
+                var userID = firebase.auth().currentUser.uid;
+                firebase.database().ref('Users/' + userID).once('value').then(function(snapshot){
+                    if(snapshot.val()){
+                        window.location.href = "main.html";
+                    }
+                    else{
+                        window.location.href = "accountSettings.html";
+                    }
+                });
+
             }
             else{
                 // alert("No active user");
